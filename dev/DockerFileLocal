@@ -1,0 +1,10 @@
+FROM localstack/localstack
+
+RUN apt-get update && apt-get install -y awscli
+
+
+COPY init.sh /opt/code/localstack/init.sh
+
+RUN chmod +x /opt/code/localstack/init.sh
+
+CMD ["cmd"]

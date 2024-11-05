@@ -1,4 +1,4 @@
-package br.com.register.part.domain.model;
+package br.com.register.part.infrastructure.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
