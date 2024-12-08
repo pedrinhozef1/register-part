@@ -27,7 +27,7 @@ public class RestExceptionHandler {
       log.error(ex.getMessage());
         return Error.builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                .message(Collections.singletonList(ex.getMessage()))
+                .message(ex.getMessage())
                 .build();
     }
 
@@ -38,7 +38,7 @@ public class RestExceptionHandler {
         log.error(ex.getMessage());
         return Error.builder()
                 .statusCode(HttpStatus.NOT_FOUND.value())
-                .message(Collections.singletonList(ex.getMessage()))
+                .message(ex.getMessage())
                 .build();
     }
 
@@ -49,7 +49,7 @@ public class RestExceptionHandler {
         log.error(ex.getMessage());
         return Error.builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                .message(Collections.singletonList(ex.getMessage()))
+                .message(ex.getMessage())
                 .build();
     }
 
@@ -60,7 +60,7 @@ public class RestExceptionHandler {
         log.error(ex.getMessage());
         return Error.builder()
                 .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .message(Collections.singletonList(ex.getMessage()))
+                .message(ex.getMessage())
                 .build();
     }
 
@@ -76,7 +76,7 @@ public class RestExceptionHandler {
 
         return Error.builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                .message(messages)
+                .message(ex.getFieldErrors().get(0).getDefaultMessage())
                 .build();
     }
 }

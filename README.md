@@ -1,1 +1,1 @@
-# register-part
+# register-partJpaEntity

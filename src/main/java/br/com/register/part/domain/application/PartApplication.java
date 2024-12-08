@@ -1,21 +1,22 @@
 package br.com.register.part.domain.application;
 
-import br.com.register.part.api.dto.UserDto;
-import br.com.register.part.domain.model.File;
+
+
 import br.com.register.part.domain.model.FileRepository;
-import br.com.register.part.domain.model.Part;
-import br.com.register.part.domain.model.User;
-import br.com.register.part.domain.service.UserService;
-import br.com.register.part.infrastructure.repository.JpaFileRepository;
-import br.com.register.part.infrastructure.repository.JpaPartRepository;
 import br.com.register.part.domain.service.FileService;
+import br.com.register.part.domain.service.UserService;
+import br.com.register.part.infrastructure.entity.FileJpaEntity;
+import br.com.register.part.infrastructure.entity.PartJpaEntity;
+import br.com.register.part.infrastructure.entity.UserJpaEntity;
+import br.com.register.part.infrastructure.repository.jpa.JpaFileRepository;
+import br.com.register.part.infrastructure.repository.jpa.JpaPartRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
-@Service
+@Component
 @AllArgsConstructor
 public class PartApplication {
     private JpaPartRepository partRepository;
@@ -24,13 +25,13 @@ public class PartApplication {
     private FileService fileService;
     private UserService userService;
 
-    public void create(Part part) {
-        partRepository.save(part);
+    public void create(PartJpaEntity partJpaEntity) {
+        partRepository.save(partJpaEntity);
     }
 
     public void saveFile(MultipartFile file, Long partId) {
         var fileId = fileRepository.uploadFile(file);
-        fIleRepository.save(new File(partId, fileId));
+        fIleRepository.save(new FileJpaEntity(partId, fileId));
     }
 
     public ArrayList<Object> findFileByPart(Long id){
@@ -44,15 +45,15 @@ public class PartApplication {
         return response;
     }
 
-    public void createUser(UserDto user) {
-        this.userService.create(user);
-    }
-
-    public User findById(Long id){
+    public UserJpaEntity findById(Long id){
         return this.userService.findById(id);
     }
 
     public void delete(Long userId) {
         this.userService.delete(userId);
+    }
+
+    public List<UserJpaEntity> findAll(String companyDocument) {
+        return userService.findAllByCompanyDocument(companyDocument);
     }
 }

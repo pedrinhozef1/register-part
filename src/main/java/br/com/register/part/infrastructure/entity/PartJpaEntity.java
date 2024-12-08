@@ -1,15 +1,15 @@
 package br.com.register.part.infrastructure.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Builder
 @Entity
-public class Part {
+public class PartJpaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

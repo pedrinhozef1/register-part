@@ -5,6 +5,7 @@ import br.com.register.part.infrastructure.InfrastructureException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
@@ -27,11 +28,11 @@ public class HttpClient extends HttpProperties {
                     .contentType(MediaType.MULTIPART_FORM_DATA)
                     .body(BodyInserters.fromMultipartData(bodyBuilder.build()))
                     .retrieve()
-                    .onStatus(HttpStatus::is4xxClientError, clientResponse ->
+                    .onStatus(HttpStatusCode::is4xxClientError, clientResponse ->
                             clientResponse.bodyToMono(Error.class)
                                     .map(Error::getMessage)
                                     .map(IntegrationBadRequest::new))
-                    .onStatus(HttpStatus::is5xxServerError, clientResponse ->
+                    .onStatus(HttpStatusCode::is5xxServerError, clientResponse ->
                             clientResponse.bodyToMono(Error.class)
                                     .map(Error::getMessage)
                                     .map(InfrastructureException::new))
@@ -55,11 +56,11 @@ public class HttpClient extends HttpProperties {
                     .contentType(MediaType.APPLICATION_JSON)
                     .header("id", String.valueOf(fileId))
                     .retrieve()
-                    .onStatus(HttpStatus::is4xxClientError, clientResponse ->
+                    .onStatus(HttpStatusCode::is4xxClientError, clientResponse ->
                             clientResponse.bodyToMono(Error.class)
                                     .map(Error::getMessage)
                                     .map(IntegrationBadRequest::new))
-                    .onStatus(HttpStatus::is5xxServerError, clientResponse ->
+                    .onStatus(HttpStatusCode::is5xxServerError, clientResponse ->
                             clientResponse.bodyToMono(Error.class)
                                     .map(Error::getMessage)
                                     .map(InfrastructureException::new))

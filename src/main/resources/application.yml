@@ -4,6 +4,15 @@ server:
     context-path: /api/manager
 
 spring:
+  cloud:
+    aws:
+      sqs:
+        endpoint: ${AWS_SQS_ENDPOINT}
+        client-notification-queue: ${CLIENT_NOTIFICATION_QUEUE}
+        email-domain-event-listener: ${EMAIL_DOMAIN_EVENT_LISTENER}
+      sns:
+        endpoint: ${AWS_SNS_ENDPOINT}
+        sent-email-topic: ${SENT_EMAIL_TOPIC}
   output:
     ansi:
       enabled: ALWAYS
@@ -30,3 +39,17 @@ file-manager:
   base-url: ${BASE_URL}
   upload: ${UPLOAD_URI}
   download: ${DOWNLOAD_URI}
+
+verify-user-callback-url: ${VERIFY_USER_CALLBACK_URL}
+authentication-service-url: ${AUTHENTICATION_SERVICE_URL}
+
+reset-password:
+  server-secret: ${FORGOT_PASSWORD_SECRET}
+  server-integer: ${FORGOT_PASSWORD_INTEGER}
+  redirect-url: ${RESET_PASSWORD_REDIRECT_URL}
+
+aws:
+  access-key: ${ACCESS_KEY}
+  secret-key: ${SECRET_KEY}
+  endpoint: ${AWS_ENDPOINT}
+  region: ${AWS_REGION}

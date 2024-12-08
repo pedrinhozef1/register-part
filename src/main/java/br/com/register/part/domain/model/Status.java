@@ -3,5 +3,6 @@ package br.com.register.part.domain.model;
 public enum Status {
     ATIVO,
     INATIVO,
-    BLOQUEADO
+    BLOQUEADO,
+    VERIFY_EMAIL_PENDING
 }

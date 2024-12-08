@@ -11,5 +11,5 @@ import java.util.List;
 @Data
 public class Error {
     private int statusCode;
-    private List<String> message;
+    private String message;
 }

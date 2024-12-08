@@ -1,7 +1,8 @@
 package br.com.register.part.api.controller;
 
+
 import br.com.register.part.domain.application.PartApplication;
-import br.com.register.part.domain.model.Part;
+import br.com.register.part.infrastructure.entity.PartJpaEntity;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,8 +17,8 @@ public class PartController {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createPart(@RequestBody Part part) {
-        this.application.create(part);
+    public void createPart(@RequestBody PartJpaEntity partJpaEntity) {
+        this.application.create(partJpaEntity);
     }
 
 }

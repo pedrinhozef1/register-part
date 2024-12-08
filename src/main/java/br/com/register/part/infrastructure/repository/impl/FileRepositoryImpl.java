@@ -1,4 +1,4 @@
-package br.com.register.part.infrastructure.repository;
+package br.com.register.part.infrastructure.repository.impl;
 
 import br.com.register.part.domain.model.FileRepository;
 import br.com.register.part.infrastructure.integration.HttpClient;

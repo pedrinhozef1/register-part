@@ -17,12 +17,12 @@ services:
       context: .
       dockerfile: DockerFileLocal
     container_name: 'localstack'
+#    entrypoint: [ "/bin/bash", "-c", "/usr/bin/localstack/init.sh && /usr/bin/localstack" ]
     ports:
       - "4566:4566"
     environment:
-      - SERVICES=sqs:4566,sns:4566,s3:4566
+      - SERVICES=sqs:4566,sns:4566,s3:4566,firehose:4566
       - HOSTNAME=localstack
-      - DEFAULT_REGION=us-east-1
       - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"

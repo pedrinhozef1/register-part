@@ -1,16 +1,30 @@
 version: '3'
 services:
-  postgres-tcs:
+  postgres:
     image: postgres:alpine
     ports:
-      - 5433:5433
-    container_name: 'postgres-part'
+      - 5432:5432
+    container_name: 'postgres-local'
     restart: always
     volumes:
-      - pg-data:/var/lib/postgresql/data
+      - pg-data:/var/lib/postgresql@14/data
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: postgres-db
+      POSTGRES_DB: postgres
+  localstack:
+    build:
+      context: .
+      dockerfile: DockerFileLocal
+    container_name: 'localstack'
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=sqs:4566,sns:4566,s3:4566
+      - HOSTNAME=localstack
+      - DEFAULT_REGION=us-east-1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
 volumes:
   pg-data:

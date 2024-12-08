@@ -1,10 +1,15 @@
 FROM localstack/localstack
 
+RUN echo "Instalando AWSCLI"
+
 RUN apt-get update && apt-get install -y awscli
 
+RUN echo "Copiando o arquivo init.sh"
 
 COPY init.sh /opt/code/localstack/init.sh
 
+RUN echo "Colocando permissoes no arquivo init.sh"
+
 RUN chmod +x /opt/code/localstack/init.sh
 
-CMD ["cmd"]
+CMD ["sh /opt/code/localstack/init.sh"]

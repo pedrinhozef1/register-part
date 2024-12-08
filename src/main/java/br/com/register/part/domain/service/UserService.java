@@ -1,54 +1,54 @@
 package br.com.register.part.domain.service;
 
-import br.com.register.part.api.dto.UserDto;
 import br.com.register.part.domain.model.Status;
-import br.com.register.part.domain.model.exception.BusinessException;
-import br.com.register.part.domain.model.exception.NotFoundException;
 import br.com.register.part.domain.model.User;
-import br.com.register.part.infrastructure.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import br.com.register.part.infrastructure.entity.UserJpaEntity;
+import br.com.register.part.domain.model.exception.NotFoundException;
+import br.com.register.part.infrastructure.dto.AuthenticationUserDto;
+import br.com.register.part.infrastructure.repository.jpa.JpaUserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class UserService {
-    private final UserRepository userRepository;
-    private RoleService roleService;
-    private CryptographyService cryptographyService;
+    private final JpaUserRepository userRepositoryJPA;
+    private final CryptographyService cryptographyService;
 
-    public void create(UserDto user) {
-        User newUser = User.builder()
-                .username(user.getUsername())
-                .password(this.cryptographyService.encrypt(user.getPassword()))
-                .confirmPassword(this.cryptographyService.encrypt(user.getConfirmPassword()))
-                .email(user.getEmail())
-                .role(this.roleService.findRoleById(user.getRole()))
-                .build();
+    @Value(value = "${authentication-service-url}")
+    private String authenticationServiceUrl;
 
-        this.checkAccountAlreadyExists(user.getUsername());
-        this.userRepository.save(newUser);
+    public Map<String, Object> authenticateUser(User user) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        var decryptedPassword = cryptographyService.decrypt(user.getPassword().getValue());
+
+        return restTemplate.postForObject(authenticationServiceUrl, new AuthenticationUserDto(user.getUsername(), user.getEmail().getAddress(), decryptedPassword), Map.class);
     }
 
-    public void checkAccountAlreadyExists(String username){
-        Optional<User> findUser = this.userRepository.findByUsername(username);
-
-        if (findUser.isPresent()) {
-            throw new BusinessException("An account with the username " + username + " already exists!");
-        }
-    }
-
-    public User findById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User not found"));
+    public UserJpaEntity findById(Long id) {
+        return userRepositoryJPA.findById(id)
+                .orElseThrow(() -> new NotFoundException("UserJpaEntity not found"));
     }
 
     public void delete(Long userId){
         var user = this.findById(userId);
         user.setStatus(Status.INATIVO);
-        this.userRepository.save(user);
+        this.userRepositoryJPA.save(user);
+    }
+
+    public List<UserJpaEntity> findAll() {
+        return userRepositoryJPA.findAll();
+    }
+
+    public List<UserJpaEntity> findAllByCompanyDocument(String companyDocument) {
+        return userRepositoryJPA.findAllByCompanyDocument(companyDocument);
     }
 }

@@ -1,26 +1,44 @@
 package br.com.register.part.api.dto;
 
-import lombok.Data;
 
-import javax.persistence.Column;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import br.com.register.part.domain.model.Company;
+import br.com.register.part.domain.model.User;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDto {
-    @NotEmpty(message = "Username field cannot be empty!")
+    @NotEmpty(message = "O nome do usuário é obrigatório")
+    private String name;
+
     private String username;
 
-    @NotEmpty(message = "Password field cannot be empty!")
+    @NotEmpty(message = "A senha do usuário é obrigatória!")
     private String password;
 
-    @NotEmpty(message = "Confirm password field cannot be empty!")
-    @Column(name = "confirm_password")
+    @NotEmpty(message = "A confirmação de senha é obrigatória")
     private String confirmPassword;
 
-    private String email;
+    private String phoneNumber;
+    private String birthDate;
 
-    @NotNull(message = "Role field cannot be null!")
-    @Column(name = "role_id")
-    private Long role;
+    @NotEmpty(message = "O e-mail do usuário é obrigatório")
+    private String email;
+    private String companyDocument;
+
+    public User toDomain() {
+        return User.of(this.name,
+                this.email,
+                this.username,
+                this.password,
+                this.confirmPassword,
+                this.phoneNumber,
+                this.birthDate,
+                Company.builder()
+                        .document(this.companyDocument).build());
+    }
 }
